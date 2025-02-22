@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码挪车系统</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff8c00, #e52e71); /* 渐变背景 */
+            animation: gradientAnimation 5s ease infinite; /* 渐变动效 */
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+
+        label {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 8px;
+            display: inline-block;
+            text-align: left;
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 1.2rem;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #qrcode-container {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #qrcode-container h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #qrcode-container .qr-card {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #qrcode-container img {
+            width: 150px;
+            height: 150px;
+            margin-right: 20px;
+        }
+
+        #qrcode-container .qr-info {
+            text-align: left;
+        }
+
+        #qrcode-container .qr-info h3 {
+            font-size: 1.2rem;
+            color: #4CAF50;
+            margin: 5px 0;
+        }
+
+        #qrcode-container .qr-info p {
+            font-size: 1rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>二维码挪车系统</h1>
+        <label for="owner">车主姓氏:</label>
+        <input type="text" id="owner" placeholder="请输入车主姓氏">
+        
+        <label for="plate">车牌号:</label>
+        <input type="text" id="plate" placeholder="请输入车牌号">
+        
+        <label for="phone">手机号码:</label>
+        <input type="text" id="phone" placeholder="请输入手机号码">
+        
+        <button onclick="generateQRCode()">生成二维码</button>
+
+        <div id="qrcode-container">
+            <h2>扫描二维码进行挪车</h2>
+            <div class="qr-card">
+                <img id="qrcode" src="" alt="二维码" />
+                <div class="qr-info">
+                    <h3 id="owner-name"></h3>
+                    <p>车牌号：<span id="plate-number"></span></p>
+                    <p>手机号码：<span id="phone-number"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateQRCode() {
+            var owner = document.getElementById('owner').value;
+            var plate = document.getElementById('plate').value;
+            var phone = document.getElementById('phone').value;
+
+            if (owner && plate && phone) {
+                var ownerTitle = owner + "先生/美女";
+                if (owner === "李" || owner === "王" || owner === "张") {
+                    ownerTitle = owner + "先生/美女";
+                }
+
+                var jumpPageUrl = "http://che.1231888.com/nuoche.html?owner=" + encodeURIComponent(owner) + "&plate=" + encodeURIComponent(plate) + "&phone=" + encodeURIComponent(phone);
+                var qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(jumpPageUrl) + "&size=200x200";
+
+                var qrCodeImg = document.getElementById('qrcode');
+                qrCodeImg.src = qrCodeUrl;
+
+                var ownerName = document.getElementById('owner-name');
+                ownerName.innerHTML = "车主：" + ownerTitle;
+
+                var plateNumber = document.getElementById('plate-number');
+                plateNumber.innerHTML = plate;
+
+                var phoneNumber = document.getElementById('phone-number');
+                phoneNumber.innerHTML = phone;
+
+                // 显示二维码和名片内容
+                var qrCodeContainer = document.getElementById('qrcode-container');
+                qrCodeContainer.style.display = 'block';
+            } else {
+                alert('请输入车主姓氏、车牌号和手机号码');
+            }
+        }
+    </script>
+
+</body>
+</html>
