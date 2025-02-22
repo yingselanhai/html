@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>挪车信息</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            background: linear-gradient(45deg, #ff8c00, #e52e71); /* 渐变背景 */
+            animation: gradientAnimation 5s ease infinite; /* 渐变动效 */
+            color: #fff;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background: linear-gradient(45deg, #ff8c00, #e52e71); }
+            50% { background: linear-gradient(45deg, #6a5acd, #32cd32); }
+            100% { background: linear-gradient(45deg, #ff8c00, #e52e71); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .info {
+            margin-top: 20px;
+            font-size: 1.2rem;
+        }
+
+        .owner-name {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: #ffe0b2;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 15px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .button:active {
+            background-color: #388e3c;
+        }
+
+        .button:focus {
+            outline: none;
+        }
+
+        .info p {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        /* 蓝色车牌样式 */
+        .plate-style {
+            display: inline-block;
+            background-color: #1E3A8A; /* 蓝色背景 */
+            padding: 10px 25px;
+            font-size: 2rem;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: slideIn 1s forwards; /* 动画效果 */
+        }
+
+        /* 动画效果：车牌从右侧滑入 */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* 自适应设计 */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .button {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+
+            .info p {
+                font-size: 1rem;
+            }
+
+            .owner-name {
+                font-size: 1.3rem;
+            }
+
+            .plate-style {
+                font-size: 1.5rem;
+                padding: 8px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>挪车信息</h1>
+
+    <!-- 显示车牌号和车牌样式 -->
+    <span id="plate-style" class="plate-style">车牌</span>
+
+    <!-- 显示车主姓氏 -->
+    <p class="owner-name" id="owner-name"></p>
+
+    <!-- 一键拨打电话 -->
+    <a href="#" id="call-button" class="button">一键拨打电话</a>
+
+    <!-- 一键发送短信 -->
+    <a href="#" id="sms-button" class="button">一键发送短信</a>
+
+    <div class="info">
+        <p>请点击按钮拨打电话或发送短信。</p>
+    </div>
+
+    <!-- 新增的返回按钮 -->
+    <a href="index.html" class="button">挪车码生成</a> <!-- 替换 index.html 为你的目标链接 -->
+
+    <script>
+        // 获取URL中的查询参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const plate = urlParams.get('plate');
+        const phone = urlParams.get('phone');
+        const owner = urlParams.get('owner');  // 获取车主姓氏
+
+        // 更新页面显示的车主姓氏
+        document.getElementById('owner-name').innerText = owner ? `车主：${owner}先生/美女` : '车主姓名未提供';
+
+        // 设置车牌样式文本
+        document.getElementById('plate-style').innerText = plate || '狗凯之家源码网';
+
+        // 设置拨打电话和发送短信的按钮链接
+        document.getElementById('call-button').setAttribute('href', `tel:${phone}`);
+        
+        // 根据车主姓氏生成短信内容
+        const greeting = owner ? `${owner}先生` : '尊敬的车主';
+        const smsBody = encodeURIComponent(`${greeting}/美女，您的车牌号是${plate}，请尽快挪车，谢谢！`);
+        
+        // 设置发送短信的链接
+        document.getElementById('sms-button').setAttribute('href', `sms:${phone}?body=${smsBody}`);
+    </script>
+
+</body>
+</html>
